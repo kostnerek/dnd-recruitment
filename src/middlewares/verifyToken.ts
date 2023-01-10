@@ -1,12 +1,5 @@
-import { validateToken } from '../services/jwt.service.js';
-import { Request, Response, NextFunction, RequestHandler } from 'express';
-
-interface IVerifyTokenRequest extends Request {
-    id: number | undefined;
-    email: string | undefined;
-    swapi_id: number | undefined;
-}
-
+import { validateToken } from '../services/jwt.service';
+import { Request, Response, NextFunction } from 'express';
 /**
  * Middleware which intercepts headers sent to the server, 
  * checks if an access token or refresh token is present, validates them,
@@ -15,17 +8,15 @@ interface IVerifyTokenRequest extends Request {
  * @param {Express.Response} res 
  * @param {Express.Next} next
  */
-export const verifyToken = (req: IVerifyTokenRequest, res: Response, next: NextFunction) => {
-    // if(req.cookies.access_token || req.cookies.refresh_token) return res.status(403).send({ message: 'Both tokens provided!' });
+export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization?.split(' ')[1];
-    
-    let validatedToken;
-    if (token) validatedToken = validateToken(token);
-    
-    if (typeof validatedToken === 'object' ) {
+    if(token===undefined) return res.status(401).send({ message: 'Unauthorized!' });
+
+    let validatedToken = validateToken(token) as unknown as IJwt;
+    if (validatedToken.hasOwnProperty('id')) {
         req.id = validatedToken.id;
         req.email = validatedToken.email;
-        req.swapi_id = validatedToken.swap_id;
+        req.swapi_id = validatedToken.swapi_id;
         next();
     } else {
         return res.status(401).send({ message: 'Unauthorized!' });
