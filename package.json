@@ -1,0 +1,38 @@
+{
+  "name": "sstv-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/app.ts",
+  "scripts": {
+    "start-prod": "DEBUG=express:* & NODE_ENV=prod nodemon ./src/app.js",
+    "prestart": "npx prisma generate && npx prisma migrate dev --name init",
+    "start": "DEBUG=express:* & nodemon -L ./src/app.ts -e ts --exec 'npx ts-node src/app.ts'",
+    "test": "NODE_ENV=test mocha ./tests/**.js --exit"
+  },
+  "author": "kostnerek@cosmopk",
+  "license": "LGPL-2.0",
+  "dependencies": {
+    "@prisma/client": "^4.7.1",
+    "@types/dotenv": "^8.2.0",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.20.0",
+    "chai-http": "^4.3.0",
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "ts-node": "^10.9.1",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.14",
+    "@types/morgan": "^1.9.3",
+    "@types/node": "^18.11.10",
+    "chai": "^4.3.6",
+    "mocha": "^10.1.0",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.20",
+    "prisma": "^4.7.1",
+    "supertest": "^6.3.0",
+    "typescript": "^4.9.3"
+  }
+}
