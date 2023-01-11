@@ -2,7 +2,8 @@ import { User as IUser } from '@prisma/client';
 import bcrypt from 'bcrypt'
 import { Request, Response } from 'express';
 import { randomInt } from "crypto"
-
+import fetch from 'cross-fetch';
+import { cache } from '../cache';
 import prisma from '../prismaConnect'
 import * as jwt from '../services/jwt.service'
 import { validateMail, validatePassword } from "../helpers/validators";
@@ -28,7 +29,9 @@ export const register = async (req: Request, res: Response) => {
     const passwordHash = await bcrypt.hash(password, 10);
 
     const swapiPersonId: number = randomInt(1,84);
-
+    const reponse = await fetch(`https://swapi.dev/api/people/${swapiPersonId}`)
+    const data = await reponse.json();
+    cache.set(`swapi:person:${swapiPersonId}`, JSON.stringify(data));
     const user = await prisma.user.create({ data: { password: passwordHash, email: email, swapi_id: swapiPersonId} })
     if (!user) return res.status(500).json({ message: "Internal server error" });
     return res.status(201).json({ message: "User created" });

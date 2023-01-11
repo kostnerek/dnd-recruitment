@@ -10,6 +10,6 @@ router.get('/vehicles', verifyToken, ResourcesController.vehicles);
 router.get('/planets', verifyToken, ResourcesController.planets); */
 
 router.get('/:type', verifyToken, ResourcesController.getResource)
-
+router.get('/', verifyToken, ResourcesController.person);
 
 export default router;
