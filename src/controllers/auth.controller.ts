@@ -1,11 +1,12 @@
-import { User as IUser } from '@prisma/client';
+import fetch from 'cross-fetch';
 import bcrypt from 'bcrypt'
+import { User } from '@prisma/client';
 import { Request, Response } from 'express';
 import { randomInt } from "crypto"
-import fetch from 'cross-fetch';
-import { cache } from '../cache';
+
 import prisma from '../prismaConnect'
 import * as jwt from '../services/jwt.service'
+import { cache } from '../cache';
 import { validateMail, validatePassword } from "../helpers/validators";
 
 export const register = async (req: Request, res: Response) => {
@@ -31,14 +32,14 @@ export const register = async (req: Request, res: Response) => {
     const swapiPersonId: number = randomInt(1,84);
     const reponse = await fetch(`https://swapi.dev/api/people/${swapiPersonId}`)
     const data = await reponse.json();
-    cache.set(`swapi:person:${swapiPersonId}`, JSON.stringify(data));
+    cache.set(`swapi:people:${swapiPersonId}`, JSON.stringify(data));
     const user = await prisma.user.create({ data: { password: passwordHash, email: email, swapi_id: swapiPersonId} })
     if (!user) return res.status(500).json({ message: "Internal server error" });
     return res.status(201).json({ message: "User created" });
 }
 
 export const login = async (req: Request, res: Response) => {
-    const auth = async(password: string, user: IUser) => {
+    const auth = async(password: string, user: User) => {
         if(!await bcrypt.compare(password, user.password)) return res.status(400).send({ message: 'Wrong password' });
         const tokens = jwt.createTokens(user);
         res.status(200).send({ message: 'Logged in', tokens });
