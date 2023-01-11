@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { Swapi } from '../helpers/swapiInterface';
-
 interface IValidResources {
     films: () => Promise<Array<object>>;
     species: () => Promise<Array<object>>;
@@ -27,4 +26,14 @@ export const getResource = async (req: Request, res: Response) => {
     } else {
         return res.status(400).send('Bad request');
     } 
+}
+
+export const person = async (req: Request, res: Response) => {
+    if(req.swapi_id) {
+        const swapi = new Swapi(req.swapi_id);
+        const person = await swapi.getPerson();
+        res.status(200).send(person);
+    } else {
+        return res.status(400).send('Bad request');
+    }
 }

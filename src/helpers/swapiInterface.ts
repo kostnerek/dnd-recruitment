@@ -1,5 +1,5 @@
 import fetch from "cross-fetch"
-
+import { cache } from "../cache"
 const swapiUrl = "https://swapi.dev/api"
 
 interface SwapiPerson {
@@ -34,7 +34,7 @@ interface ISwapi {
 export class Swapi implements ISwapi{
     personId: number;
     personData: Promise<SwapiPerson>;
-
+    
     constructor(swapiId: number) {
         this.personId = swapiId;
         this.personData = Promise.resolve(this.getPerson());
@@ -46,19 +46,40 @@ export class Swapi implements ISwapi{
         console.log('fetching key: ', key);
         if(data===undefined || data===null) return [];
         if(typeof data === 'string') {
-            const response = await fetch(data);
-            return [await response.json()];
+            const keyId = data.split('/').at(-2);
+            const redisKey = `swapi:${key}:${keyId}`;
+            const cacheResponse = await cache.get(redisKey);
+            if(typeof cacheResponse === 'string') {
+                return JSON.parse(cacheResponse);
+            }
+            const apiResponse = await (await fetch(data)).json();
+            cache.set(redisKey, JSON.stringify(apiResponse))
+            return [apiResponse];
         }
         const allData = Promise.all(data.map(async (link: string) => {
-            const response = await fetch(link);
-            return await response.json();
+            const keyId = link.split('/').at(-2);
+            const redisKey = `swapi:${key}:${keyId}`;
+            const cacheResponse = await cache.get(redisKey);
+            if(typeof cacheResponse === 'string') {
+                return JSON.parse(cacheResponse);
+            }
+            const apiResponse = await (await fetch(link)).json();
+            cache.set(redisKey, JSON.stringify(apiResponse))
+            return await apiResponse;
         }))
         return await allData;
     }
 
     getPerson = async (): Promise<SwapiPerson> => {
-        const response = await fetch(`${swapiUrl}/people/${this.personId}`)
-        const data = await response.json()
+        const redisKey = `swapi:person:${this.personId}`;
+        const cacheResponse = await cache.get(redisKey)
+        if(typeof cacheResponse === 'string') {
+            return JSON.parse(cacheResponse);
+        }
+        const apiResponse = await fetch(`${swapiUrl}/people/${this.personId}`)
+        const data = await apiResponse.json()
+        cache.set(redisKey, JSON.stringify(data));
+
         return data;
     }
 
