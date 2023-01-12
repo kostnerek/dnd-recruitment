@@ -1,0 +1,597 @@
+{
+    "swagger": "2.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "DevAndDeliver recruitment API",
+        "description": "Find out how your APIs work",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer <token>\""
+        }
+    },
+    "paths": {
+        "/auth/login": {
+            "post": {
+                "summary": "Login user",
+                "tags": [
+                    "Auth"
+                ],
+                "description": "Login user in system",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "Login user",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Login Success",
+                        "schema": {
+                            "$ref": "#/definitions/tokens"
+                        }
+                    },
+                    "400": {
+                        "description": "Missing required fields"
+                    },
+                    "404": {
+                        "description": "Email is not registered"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "summary": "Register user",
+                "tags": [
+                    "Auth"
+                ],
+                "description": "Registers user in system",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "Register user",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "User created"
+                    },
+                    "400": {
+                        "description": "Missing required fields, or fields invalid"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/auth/refresh": {
+            "post": {
+                "summary": "Refresh tokens",
+                "security": [
+                    {
+                        "Bearer": []
+                    }],
+                "tags": [
+                    "Auth"
+                ],
+                "description": "Refreshes accessToken and refreshToken",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tokens refreshed",
+                        "schema": {
+                            "$ref": "#/definitions/tokens"
+                        }
+                    },
+                    "400": {
+                        "description": "Missing token or invalid token"
+                    }
+                }
+            }
+        },
+        "/resource/films": {
+            "get": {
+                "summary": "Returns all films for user",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "Resource"
+                ],
+                "description": "Returns all films for user, whose id will be taken from JWT token",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Resources returned",
+                        "schema": {"$ref": "#/definitions/films"} 
+                    },
+                    "400": {
+                        "description": "Missing token or invalid token"
+                    },
+                    "404": {
+                        "description": "Resource type not found"
+                    }
+                }
+            }
+        },
+        "/resource/species": {
+            "get": {
+                "summary": "Returns all species for user",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "Resource"
+                ],
+                "description": "Returns all species for user, whose id will be taken from JWT token",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Resources returned",
+                        "schema": {"$ref": "#/definitions/species"} 
+                    },
+                    "400": {
+                        "description": "Missing token or invalid token"
+                    },
+                    "404": {
+                        "description": "Resource type not found"
+                    }
+                }
+            }
+        },
+        "/resource/starships": {
+            "get": {
+                "summary": "Returns all starships for user",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "Resource"
+                ],
+                "description": "Returns all starships for user, whose id will be taken from JWT token",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Resources returned",
+                        "schema": {"$ref": "#/definitions/starships"} 
+                    },
+                    "400": {
+                        "description": "Missing token or invalid token"
+                    },
+                    "404": {
+                        "description": "Resource type not found"
+                    }
+                }
+            }
+        },
+        "/resource/vehicles": {
+            "get": {
+                "summary": "Returns all vehicles for user",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "Resource"
+                ],
+                "description": "Returns all vehicles for user, whose id will be taken from JWT token",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Resources returned",
+                        "schema": {"$ref": "#/definitions/vehicles"} 
+                    },
+                    "400": {
+                        "description": "Missing token or invalid token"
+                    },
+                    "404": {
+                        "description": "Resource type not found"
+                    }
+                }
+            }
+        },
+        "/resource/planets": {
+            "get": {
+                "summary": "Returns all planets for user",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "Resource"
+                ],
+                "description": "Returns all planets for user, whose id will be taken from JWT token",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Resources returned",
+                        "schema": {"$ref": "#/definitions/planets"} 
+                    },
+                    "400": {
+                        "description": "Missing token or invalid token"
+                    },
+                    "404": {
+                        "description": "Resource type not found"
+                    }
+                }
+            }
+        }
+    },
+
+    "definitions": {
+        "User": {
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "userEmail": {
+            "properties": {
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
+        "tokens": {
+            "properties": {
+                "accessToken": {
+                    "type": "string"
+                },
+                "refreshToken": {
+                    "type": "string"
+                }
+            }
+        },
+        "resourceURL": {
+            "properties": {
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "resource": {
+            "properties": {
+                "schema":{
+                    "$ref": "#/definitions/resourceURL"
+                },
+                "id":{
+                    "type": "string"
+                },
+                "created":{
+                    "type": "string"
+                },
+                "edited":{
+                    "type": "string"
+                }
+            }
+        },
+
+        "films": {
+            "properties": {
+                "schema":{
+                    "$ref": "#/definitions/resource"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "episode_id": {
+                    "type": "integer"
+                },
+                "opening_crawl": {
+                    "type": "string"
+                },
+                "director": {
+                    "type": "string"
+                },
+                "producer": {
+                    "type": "string"
+                },
+                "release_date": {
+                    "type": "string"
+                },
+                "characters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/resourceURL"
+                    }
+                },
+                "planets": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/resourceURL"
+                    }
+                },
+                "starships": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/resourceURL"
+                    }
+                },
+                "vehicles": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/resourceURL"
+                    }
+                },
+                "species": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/resourceURL"
+                    }
+                }
+            }
+        },
+        "species": {
+            "properties": {
+                "schema":{
+                    "$ref": "#/definitions/resource"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "classification": {
+                    "type": "string"
+                },
+                "designation": {
+                    "type": "string"
+                },
+                "average_height": {
+                    "type": "string"
+                },
+                "skin_color": {
+                    "type": "string"
+                },
+                "hair_color": {
+                    "type": "string"
+                },
+                "eye_color": {
+                    "type": "string"
+                },
+                "average_lifespan": {
+                    "type": "string"
+                },
+                "homeworld": {
+                    "$ref": "#/definitions/resourceURL"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "people": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/resourceURL"
+                    }
+                },
+                "films": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/resourceURL"
+                    }
+                }
+
+            }
+        },
+        
+        "starships": {
+            "properties": {
+                "schema":{
+                    "$ref": "#/definitions/resource"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "model": {
+                    "type": "string"
+                },
+                "manufacturer": {
+                    "type": "string"
+                },
+                "cost_in_credits": {
+                    "type": "string"
+                },
+                "length": {
+                    "type": "string"
+                },
+                "max_atmosphering_speed": {
+                    "type": "string"
+                },
+                "crew": {
+                    "type": "string"
+                },
+                "passengers": {
+                    "type": "string"
+                },
+                "cargo_capacity": {
+                    "type": "string"
+                },
+                "consumables": {
+                    "type": "string"
+                },
+                "hyperdrive_rating": {
+                    "type": "string"
+                },
+                "MGLT": {
+                    "type": "string"
+                },
+                "starship_class": {
+                    "type": "string"
+                },
+                "pilots": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/resourceURL"
+                    }
+                },
+                "films": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/resourceURL"
+                    }
+                }
+
+            }
+        },
+        
+        "vehicles": {
+            "properties": {
+                "schema":{
+                    "$ref": "#/definitions/resource"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "model": {
+                    "type": "string"
+                },
+                "manufacturer": {
+                    "type": "string"
+                },
+                "cost_in_credits": {
+                    "type": "string"
+                },
+                "length": {
+                    "type": "string"
+                },
+                "max_atmosphering_speed": {
+                    "type": "string"
+                },
+                "crew": {
+                    "type": "string"
+                },
+                "passengers": {
+                    "type": "string"
+                },
+                "cargo_capacity": {
+                    "type": "string"
+                },
+                "consumables": {
+                    "type": "string"
+                },
+                "vehicle_class": {
+                    "type": "string"
+                },
+                "pilots": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/resourceURL"
+                    }
+                },
+                "films": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/resourceURL"
+                    }
+                }
+            }
+        },
+        "planets": {
+            "properties": {
+                "schema":{
+                    "$ref": "#/definitions/resource"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "rotation_period": {
+                    "type": "string"
+                },
+                "orbital_period": {
+                    "type": "string"
+                },
+                "diameter": {
+                    "type": "string"
+                },
+                "climate": {
+                    "type": "string"
+                },
+                "gravity": {
+                    "type": "string"
+                },
+                "terrain": {
+                    "type": "string"
+                },
+                "surface_water": {
+                    "type": "string"
+                },
+                "population": {
+                    "type": "string"
+                },
+                "residents": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/resourceURL"
+                    }
+                },
+                "films": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/resourceURL"
+                    }
+                }
+            }
+        }
+
+    }
+}

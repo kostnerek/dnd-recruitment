@@ -35,7 +35,7 @@ export interface Species extends Resource {
     hair_colors: string;
     eye_colors: string;
     average_lifespan: string;
-    homeworld: string;
+    homeworld: ResourceUrl;
     language: string;
     people: ResourceUrl[];
     films: ResourceUrl[];
@@ -96,7 +96,7 @@ export interface People extends Resource {
     gender: string;
     hair_color: string;
     height: string;
-    homeworld: string;
+    homeworld: ResourceUrl;  
     mass: string;
     name: string;
     skin_color: string;

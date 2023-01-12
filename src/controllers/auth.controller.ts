@@ -56,7 +56,7 @@ export const login = async (req: Request, res: Response) => {
     prisma.user.findFirst({
         where: { email }
     }).then(async (user) => {
-        if(!user) return res.status(400).send({ message: 'User not found' });
+        if(!user) return res.status(404).send({ message: 'User not found' });
         auth(password, user);
     });
 }

@@ -26,7 +26,7 @@ export const getResource = async (req: Request, res: Response) => {
             const resource = await resourceMethod();
             res.status(200).send(resource);
         } else {
-            return res.status(400).send('Bad request');
+            return res.status(404).send('Resource not found');
         }
     } else {
         return res.status(400).send('Bad request');
