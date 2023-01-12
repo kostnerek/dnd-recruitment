@@ -6,9 +6,8 @@ declare global {
             id?: number;
             email?: string;
             swapi_id?: number;
+            refreshToken?: string;
         }
-    }
-    export interface IJwt extends User {
-        type?: string;
+        
     }
 }

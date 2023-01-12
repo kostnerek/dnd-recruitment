@@ -14,7 +14,6 @@ const app: Express = express();
 const port: string = process.env.PORT || "3000";
 
 
-
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 if (process.env.NODE_ENV !== 'test') {
@@ -31,6 +30,3 @@ app.get("/", (req: Request, res: Response) => {
 app.listen(port, () => {
     console.log(`Server started on port ${port}`);
 });
-
-
-export default app; // for testing purposes 
