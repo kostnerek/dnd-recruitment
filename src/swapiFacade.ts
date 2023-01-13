@@ -19,11 +19,20 @@ export class Swapi implements ISwapi{
         this.personId = swapiId;
     }
     
+    #getResourceId = (url: string): string | undefined => {
+        return url.split('/').at(-2);
+    }
+
+    #getRedisKey = (key: string, keyId: string) => {
+        return `swapi:${key}:${keyId}`;
+    }
+
+
     fetchData = async (key: string, url: string) => {
-        const keyId = url.split('/').at(-2); // get the id from the url
-        const redisKey = `swapi:${key}:${keyId}`;
+        const keyId = this.#getResourceId(url);
+        const redisKey = this.#getRedisKey(key, keyId ? keyId : '');
         
-        const cacheResponse = await cache.get(redisKey); // check if the data exists in cache
+        const cacheResponse = await cache.get(redisKey);
         if(typeof cacheResponse === 'string') {
             return JSON.parse(cacheResponse);
         }

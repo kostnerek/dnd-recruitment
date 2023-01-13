@@ -20,7 +20,7 @@ export const getResource = async (req: Request, res: Response) => {
             vehicles: () => swapi.getVehicles(),
             planets: () => swapi.getPlanets()
         }
-        // check if the requested resource type is valid
+        
         if(Object.keys(validTypes).includes(req.params.type)) {
             const resourceMethod = validTypes[req.params.type as keyof IValidResources] // get method from the validTypes object with give key
             const resource = await resourceMethod();

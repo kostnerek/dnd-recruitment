@@ -12,15 +12,13 @@ import * as config from '../config';
 
 export const register = async (req: Request, res: Response) => {
     const { email, password } = req.body;
-    // if any of the fields are empty, return error
     if (!password || !email) {
         return res.status(400).json({ message: "Missing username, password or email" });
     }
-    // validate username, password and email if any of them is invalid, return error
+
     if (validatePassword(password) === false) return res.status(400).json({ message: "Password needs to be between 8-32 characters, have one lower and uppercase and one special character" });
     if (validateMail(email) === false)        return res.status(400).json({ message: "Email is not valid" });
 
-    // check if user with the same email already exists, if so return error
     const userEmailCheck = await prisma.user.findFirst({ where: { email: email } });
     if (userEmailCheck) return res.status(400).json({ message: "User already exists" });
 
@@ -30,7 +28,6 @@ export const register = async (req: Request, res: Response) => {
     const data = await reponse.json();
     cache.set(`swapi:people:${swapiPersonId}`, JSON.stringify(data), {EX: config.EXPIRE_TIME});
     
-    // create user in db
     const passwordHash = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({ data: { password: passwordHash, email: email, swapi_id: swapiPersonId} })
     if (!user) return res.status(500).json({ message: "Internal server error" });
@@ -42,7 +39,6 @@ export const login = async (req: Request, res: Response) => {
         if(!await bcrypt.compare(password, user.password)) { 
             return res.status(401).send({ message: 'Wrong password' });
         }
-        // if password check passes, create tokens, and return them
         const tokens = jwt.createTokens(user);
         res.status(200).send({ message: 'Logged in', tokens });
     }
@@ -52,7 +48,6 @@ export const login = async (req: Request, res: Response) => {
         return res.status(400).send({ message: 'No username/email or password provided' })
     };
 
-    // find user with given mail, if not found return error else, check if provided password matches with db's hash
     prisma.user.findFirst({
         where: { email }
     }).then(async (user) => {
