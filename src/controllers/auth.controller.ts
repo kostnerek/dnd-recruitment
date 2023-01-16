@@ -66,8 +66,11 @@ export const refreshToken = async (req: Request, res: Response) => {
     if (!token) {
         return res.status(400).send({ message: 'Missing token' });
     }
+    
     const response = await jwt.refreshTokenService(token);
-    if (response) {
+
+    if (response.hasOwnProperty('accessToken') && response.hasOwnProperty('refreshToken')) {
         res.status(200).send(response);
     }
+    res.status(400).send({ message: 'Invalid token' });
 }

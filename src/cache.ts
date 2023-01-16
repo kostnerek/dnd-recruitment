@@ -6,6 +6,7 @@ import * as config from './config';
 export const cache = createClient({url: config.REDIS_URL});
 cache.connect();
 cache.on('error', (err: any) => {
+    console.log(config.REDIS_URL)
     console.log('Redis client error:', err);
 })
 cache.on('connect', () => {
