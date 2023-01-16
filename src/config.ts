@@ -8,4 +8,4 @@ export const REFRESH_TOKEN_EXPIRATION: string = process.env.REFRESH_TOKEN_EXPIRA
 export const REDIS_URL: string = process.env.REDIS_URL ? process.env.REDIS_URL : ''
 export const EXPIRE_TIME: number = process.env.EXPIRE_TIME ? parseInt(process.env.EXPIRE_TIME) : 0
 
-
+export const MAX_SWAPI_ID: number = 84

@@ -23,7 +23,7 @@ export const register = async (req: Request, res: Response) => {
     if (userEmailCheck) return res.status(400).json({ message: "User already exists" });
 
     // assign random id from swapi person ids pool to user fetch it's data and store in cache
-    const swapiPersonId: number = randomInt(1,84);
+    const swapiPersonId: number = randomInt(1,config.MAX_SWAPI_ID);
     const reponse = await fetch(`https://swapi.dev/api/people/${swapiPersonId}`)
     const data = await reponse.json();
     cache.set(`swapi:people:${swapiPersonId}`, JSON.stringify(data), {EX: config.EXPIRE_TIME});

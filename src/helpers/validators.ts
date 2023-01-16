@@ -22,9 +22,6 @@ export const validateMail = (email: string): boolean => {
 
 export const validatePassword = (password: string): boolean => {
     const tester = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
-    if (!password) {
-        return false
-    };
     if (!tester.test(password)) {
         return false;
     }
